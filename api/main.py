@@ -1,7 +1,11 @@
+from fastapi import FastAPI
 from services.nominatim.NominatimService import NominatimService
 
-main_search = {
-    'location_card': NominatimService.LocationData("-7.8725687", "-77.3607387"),
-}
+app = FastAPI()
 
-print(main_search)
+@app.get("/dashboard")
+def get_dashboard():
+    dashboard_data = {
+        "location_card": NominatimService.LocationData("-7.8725687", "-77.3607387"),
+    }
+    return dashboard_data
