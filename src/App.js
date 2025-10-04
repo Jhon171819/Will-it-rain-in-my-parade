@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import Index from './pages/home';
 import './App.css';
 
