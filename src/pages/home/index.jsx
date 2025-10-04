@@ -3,8 +3,16 @@ import "./index.scss";
 import { LeafletMap } from "./components/leafletmap";
 import ButtonDatePicker from "./components/datepicker";
 import { TbWorld } from "react-icons/tb";
+import { useEffect, useState } from "react";
 
 export default function Index() {
+
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    console.log('Selected location changed:', location);
+  }, [location]);
+
   return (
     <div className="container d-flex flex-column align-items-center my-3 overflow-hidden">
       <div className="title mt-4">
@@ -25,7 +33,7 @@ export default function Index() {
         </ul>
       </div>
       <div className="map">
-        <LeafletMap />
+        <LeafletMap  {...{ setActualPosition:setLocation, actualPosition: location }} />
         <div className="mt-2 mt-2 w-100 d-flex justify-content-between">
           <div className="buttons-container">
             <ButtonDatePicker />

@@ -1,25 +1,46 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import api from "../../../api/api";
+import { getPosition } from "../../../api/routes";
 
-export function LeafletMap() {
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
+export function LeafletMap(props) {
+    const {actualPosition, setActualPosition} = props;
+    console.log('Actual position in map:', actualPosition, setActualPosition);
+    const [markedPosition, setMarkedPosition] = useState();
+
     const mapRef = useRef(null);
     const mapInstanceRef = useRef(null);
 
+
     const geolocation = () => navigator.geolocation.getCurrentPosition(
         (position) => {
-            console.log(position);
             const { latitude, longitude } = position.coords;
             return { lat: latitude, long: longitude };
         }
     );
-    const handleMapClick = (e, map) => {
+    const handleMapClick = useCallback((e, map) => {
         const { lat, lng } = e.latlng;
-        api.get('/reverse', { lat, lon: lng })
+            L.marker(markedPosition).remove();
+
+
+        const response = getPosition({ lat, lon: lng }).then((response) => {
+            setActualPosition(response);
+            console.log('response: ',response)
+        });
+
+        setMarkedPosition([lat, lng]);
         L.marker([lat, lng]).addTo(map);
 
-    }
+    }, [actualPosition, markedPosition]);
 
     useEffect(() => {
         if (!mapRef.current) return;
@@ -41,6 +62,7 @@ export function LeafletMap() {
             }
         };
     }, []);
+
 
     return <div id="map" ref={mapRef} style={{ height: "400px", width: "100%" }} />;
 }

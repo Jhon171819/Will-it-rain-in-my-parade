@@ -1,4 +1,4 @@
-const apiBase = '/nominatim';
+const apiBase = 'http://192.168.20.8:8000';
 
 async function handleResponse(response) {
     const contentType = response.headers.get('content-type') || '';
