@@ -1,6 +1,9 @@
 .map {
     height: 50%;
     width: 57%;
+    @media (max-width: 768px) {
+        width: 90%;
+    }
 }
 
 
