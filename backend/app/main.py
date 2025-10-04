@@ -1,5 +1,7 @@
 from services.nominatim.NominatimService import NominatimService
 
-address = NominatimService.LocationData("-3.7467414", "-38.5358611")
+main_search = {
+    'location_card': NominatimService.LocationData("-7.8725687", "-77.3607387"),
+}
 
-print(address)
+print(main_search)
