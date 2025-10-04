@@ -24,8 +24,16 @@ const api = {
 
     async request(method, path, data = null, options = {}) {
         const url = `${this.base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
-        const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
-        const fetchOptions = { method: method.toUpperCase(), headers, ...options };
+            // default headers: GET should not send a Content-Type by default
+            const methodUpper = method.toUpperCase();
+            const defaultHeaders = (m) => {
+                const base = { 'Accept': 'application/json' };
+                if (m === 'GET') return base;
+                return Object.assign({}, base, { 'Content-Type': 'application/json' });
+            };
+
+            const headers = Object.assign(defaultHeaders(methodUpper), options.headers || {});
+            const fetchOptions = Object.assign({ method: methodUpper, headers }, options);
 
         if (fetchOptions.method === 'GET') {
             const query = data ? new URLSearchParams(data).toString() : '';
