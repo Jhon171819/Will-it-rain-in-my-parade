@@ -1,4 +1,4 @@
-const apiBase = '/api';
+const apiBase = '/nominatim';
 
 async function handleResponse(response) {
     const contentType = response.headers.get('content-type') || '';

@@ -16,7 +16,7 @@ export function LeafletMap() {
     );
     const handleMapClick = (e, map) => {
         const { lat, lng } = e.latlng;
-        api.get('dashboard', { lat, lon: lng })
+        api.get('/reverse', { lat, lon: lng })
         L.marker([lat, lng]).addTo(map);
 
     }
